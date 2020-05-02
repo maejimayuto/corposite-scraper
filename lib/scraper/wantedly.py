@@ -49,6 +49,18 @@ class Wantedly:
                 project_urls += [self.WANTEDLY_URL + e.a.get("href")]
         return project_urls
 
+    def __get_company_name(self, element):
+        if element.find_all('div', class_='company-name'):
+            return element.find_all('div', class_='company-name')[0].getText().strip()
+        else:
+            return ''
+
+    def __get_corpo_url(self, element):
+        if element.find_all('div', class_='company-description') and element.find_all('div', class_='company-description')[0].a:
+            return element.find_all('div', class_='company-description')[0].a.get("href")
+        else:
+            return ''
+
     def __get_company_info(self, all_project_urls):
         company_info = []
         for url in all_project_urls:
@@ -58,8 +70,8 @@ class Wantedly:
             elements = soup.find_all('div', class_='company')
             for e in elements:
                 company_info += [{
-                    'company_name': e.find_all('div', class_='company-name')[0].getText().strip(),
-                    'corpo_url': e.find_all('div', class_='company-description')[0].a.get("href"),
+                    'company_name': self.__get_company_name(e),
+                    'corpo_url': self.__get_corpo_url(e),
                     'wantedly_url': url.split('?')[0]
                 }]
         return company_info
@@ -67,5 +79,5 @@ class Wantedly:
     def scrape(self, email, pw):
         self.__login(email, pw)
         query = self.__query_gen()
-        all_project_urls = self.__get_all_project_urls(last_page_num=1, query=query)
+        all_project_urls = self.__get_all_project_urls(last_page_num=300, query=query)
         return self.__get_company_info(all_project_urls)
