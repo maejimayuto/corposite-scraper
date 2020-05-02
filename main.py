@@ -8,3 +8,6 @@ if __name__ == "__main__":
     company_info = wantedly_scraper.scrape(email=sys.argv[1], pw=sys.argv[2])
     csv_util.write_to_csv(company_info)
 
+    # filename = '202005011545.csv'
+    # path = 'data/'
+    # csv_util.drop_company_name_duplications(path, filename)
