@@ -9,10 +9,13 @@ if __name__ == "__main__":
         wantedly_scraper = wantedly.Wantedly()
         company_info = []
         company_info = wantedly_scraper.scrape(email=sys.argv[1], pw=sys.argv[2])
+        slack_nortify.post('finish to scrape the Wantedly')
         csv_util.write_to_csv(company_info)
-        slack_nortify.post('finish to scrape the Wantedly <@maejimayuto>')
-    except:
+        slack_nortify.post('complete write to the csv <@maejimayuto>')
+    except Exception as e:
         slack_nortify.post('got erros in scraping the Wantedly <@maejimayuto>')
+        slack_nortify.post('error' + str(e))
+        print(e)
 
     # filename = '202005011545.csv'
     # path = 'data/'
