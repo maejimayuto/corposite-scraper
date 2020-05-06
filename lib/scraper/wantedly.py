@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 import time
+from lib import slack_nortify
 
 class Wantedly:
     def __init__(self):
@@ -32,10 +33,13 @@ class Wantedly:
                 'type': 'mixed',
                 'page': page,
                 'occupation_types[]': 'jp__engineering',
-                'hiring_types[]': 'contract',
+                # 'hiring_types[]': 'contract',
+                'hiring_types[]': 'mid_career',
+                'hiring_types[]': 'newgrad',
                 'locations[]': 'kanto',
             })
             yield self.WANTEDLY_URL + '/?' + params
+            slack_nortify.post('go to page' + str(page))
             page += 1
 
     def __get_all_project_urls(self, last_page_num, query):
